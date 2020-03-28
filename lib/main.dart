@@ -12,9 +12,15 @@ class BytebankApp extends StatelessWidget {
   }
 }
 
-class FormularioTransferencia extends StatelessWidget {
+class FormularioTransferencia extends StatefulWidget {
+  @override
+  _FormularioTransferenciaState createState() => _FormularioTransferenciaState();
+}
+
+class _FormularioTransferenciaState extends State<FormularioTransferencia> {
   final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
+
   final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
@@ -23,24 +29,26 @@ class FormularioTransferencia extends StatelessWidget {
       appBar: AppBar(
         title: Text("Criando Transferência"),
       ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            controlador: _controladorCampoNumeroConta,
-            rotulo: "Número da Conta",
-            dica: "0000",
-          ),
-          Editor(
-            controlador: _controladorCampoValor,
-            rotulo: "Valor",
-            dica: "0.00",
-            icone: Icons.monetization_on,
-          ),
-          RaisedButton(
-            child: Text('Confirmar'),
-            onPressed: () => _criaTranferencia(context),
-          ),
-        ],
+      body: SingleChildScrollView(
+              child: Column(
+          children: <Widget>[
+            Editor(
+              controlador: _controladorCampoNumeroConta,
+              rotulo: "Número da Conta",
+              dica: "0000",
+            ),
+            Editor(
+              controlador: _controladorCampoValor,
+              rotulo: "Valor",
+              dica: "0.00",
+              icone: Icons.monetization_on,
+            ),
+            RaisedButton(
+              child: Text('Confirmar'),
+              onPressed: () => _criaTranferencia(context),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -89,22 +97,25 @@ class Editor extends StatelessWidget {
 }
 
 
-class ListaTransferencias extends StatelessWidget {
+class ListaTransferencias extends StatefulWidget {
   final List<Transferencia> _transferencias = List();
+  
+  @override
+  _ListaTransferenciasState createState() => _ListaTransferenciasState();
+}
 
+class _ListaTransferenciasState extends State<ListaTransferencias> {
 
   @override
   Widget build(BuildContext context) {
-    _transferencias.add(Transferencia(200.0, 3000));
-    _transferencias.add(Transferencia(200.0, 3000));
     return Scaffold(
       appBar: AppBar(
         title: Text("Tranferências"),
       ),
       body: ListView.builder(
-          itemCount: _transferencias.length,
+          itemCount: widget._transferencias.length,
           itemBuilder: (context, indice) {
-            final transferencia = _transferencias[indice];
+            final transferencia = widget._transferencias[indice];
             return ItemTransferencia(transferencia);
           },
       ),
@@ -118,9 +129,13 @@ class ListaTransferencias extends StatelessWidget {
             }),
           );
           future.then((transferenciaRecebida) {
-            debugPrint('Chegou no then do future');
-            debugPrint('$transferenciaRecebida');
-            _transferencias.add(transferenciaRecebida);
+            if (transferenciaRecebida != null){
+              debugPrint('Chegou no then do future');
+              debugPrint('$transferenciaRecebida');
+              setState(() {
+                widget._transferencias.add(transferenciaRecebida);
+              });
+            }
           });
         },
       ),
