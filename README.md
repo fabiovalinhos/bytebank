@@ -1,4 +1,4 @@
-# bytebank
+# ByteBank
 
 A new Flutter project by Alura (Instructor: Alex Felipe)
 

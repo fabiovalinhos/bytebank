@@ -88,26 +88,14 @@ class Editor extends StatelessWidget {
   }
 }
 
-class  extends StatefulWidget {
-  @override
-  _State createState() => _State();
-}
 
-class _State extends State<> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      
-    );
-  }
-}
-
-class ListaTransferencias extends StatefulWidget {
+class ListaTransferencias extends StatelessWidget {
   final List<Transferencia> _transferencias = List();
 
 
   @override
   Widget build(BuildContext context) {
+    _transferencias.add(Transferencia(200.0, 3000));
     _transferencias.add(Transferencia(200.0, 3000));
     return Scaffold(
       appBar: AppBar(
